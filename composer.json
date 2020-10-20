@@ -1,0 +1,10 @@
+{
+    "require": {
+        "google/apiclient": "^2.0",
+        "volantus/php-pigpio": "^0.3.0"
+    },
+    
+    "autoload": {
+        "psr-4": {"Heater\\": "src/"}
+    }
+}
