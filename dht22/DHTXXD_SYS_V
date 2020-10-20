@@ -1,0 +1,65 @@
+#! /bin/sh
+#==========================================================================
+# Installation
+# - Move this to /etc/init.d/myservice
+# - chmod +x this
+#
+# Starting and stopping
+# - Start: `service myservice start` or `/etc/init.d/myservice start`
+# - Stop: `service myservice stop` or `/etc/init.d/myservice stop`
+#==========================================================================
+# Label
+NAME=DHTXXD_SYS_V
+DESC="SYS V Daemon on DHT22 sensor Control unit"
+
+# SYS_V files
+PIDFILE="/var/run/${NAME}.pid"
+LOCKFILE="/var/run/${NAME}.lock"
+LOGFILE="/var/log/${NAME}.log"
+
+# Get working directory
+PWD=`pwd`
+
+# Daemon path
+DAEMON="${PWD}/DHTXXD"
+DAEMON_OPTS=" -g5 -i60"
+
+# CMD line options
+# START_OPTS="start-stop-daemon --start --background --make-pidfile --pidfile ${PIDFILE} --exec ${DAEMON}" - does not work!
+START_OPTS="-c ${PWD} -p ${PIDFILE} -l ${PIDFILE} -v ${DAEMON} ${DAEMON_OPTS}"
+STOP_OPTS="--stop --pidfile ${PIDFILE}"
+
+# Test executable bit
+test -x $DAEMON || exit 0
+
+# Set env
+set -e
+
+# Usage
+case "$1" in
+    start)
+        echo -n "Starting ${DESC}: "
+        daemonize $START_OPTS >> $LOGFILE
+        echo "$NAME"
+        ;;
+    stop)
+        echo -n "Stopping $DESC: "
+        start-stop-daemon $STOP_OPTS
+        echo "$NAME"
+        rm -f $PIDFILE
+        ;;
+    restart|force-reload)
+        echo -n "Restarting $DESC: "
+        start-stop-daemon $STOP_OPTS
+        sleep 1
+        daemonize $START_OPTS >> $LOGFILE
+        echo "$NAME"
+        ;;
+    *)
+        N=/etc/init.d/$NAME
+        echo "Usage: $N {start|stop|restart|force-reload}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0
