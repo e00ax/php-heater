@@ -63,52 +63,26 @@ function getClient()
 $client = getClient();
 $service = new Google_Service_Calendar($client);
 
-
-
-
 // Print the next 10 events on the user's calendar.
 $calendarId = 'primary';
-
-
-
 $optParams = array(
-    'maxResults' => 10,
-    'orderBy' => 'startTime',
-    'singleEvents' => true,
-    'timeMin' => date('c'),
+  'maxResults' => 10,
+  'orderBy' => 'startTime',
+  'singleEvents' => true,
+  'timeMin' => date('c'),
 );
-
-
 $results = $service->events->listEvents($calendarId, $optParams);
-
-
 $events = $results->getItems();
-
-
-print_r($events);
-
-
 
 if (empty($events)) {
     print "No upcoming events found.\n";
 } else {
     print "Upcoming events:\n";
     foreach ($events as $event) {
-
-        if ($event->colorId == 11) {
-
-            $start = $event->start->dateTime;
-            if (empty($start)) {
-                $start = $event->start->date;
-            }
-            printf("%s (%s)\n", $event->getSummary(), $start);
-        } else {
-            $start = $event->start->dateTime;
-            if (empty($start)) {
-                $start = $event->start->date;
-            }
-            printf("%s (%s)\n", $event->getSummary(), $start);
+        $start = $event->start->dateTime;
+        if (empty($start)) {
+            $start = $event->start->date;
         }
-
+        printf("%s (%s)\n", $event->getSummary(), $start);
     }
 }

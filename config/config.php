@@ -8,10 +8,23 @@
  * ============================================================================
 */
 return [
+    /**
+     * MySQL
+     */
+    'mysql' => [
+        'server' => 'localhost',
+        'username' => 'sh',
+        'passwd' => 'sh2019',
+        'db' => 'smarthome',
+    ],
+
+    /**
+     * Heater
+     */
     'heater' => [
-        'text' => '[smarthome => heater]',
-        'ini' => '/webtools/heater/config/heater.ini',
-        'log' => '/webtools/heater/log/heater.log',
+        'title' => '[smarthome => php-heater]',
+        'ini' => '/webtools/php-heater/config/heater.ini',
+        'log' => '/webtools/php-heater/log/heater.log',
         'gpio' => '/usr/bin/gpio',
         'temp' => '21',
         'sleeptime' => '600',
@@ -24,18 +37,18 @@ return [
 
         'channel' => [
             '1' => '26',
-            '2' => '20',
-            '3' => '21',
+            //'2' => '20', - unused
+            //'3' => '21', - unused
         ],
 
         'daemon' => [
-            'path' => '/webtools/heater/',
-            'name' => 'heater',
+            'path' => '/webtools/php-heater/',
+            'name' => 'php-heater',
         ],
 
         'google' => [
-            'token' => '/webtools/heater/auth/token.json',
-            'credentials' => '/webtools/heater/auth/credentials.json',
+            'token' => '/webtools/php-heater/auth/token.json',
+            'credentials' => '/webtools/php-heater/auth/credentials.json',
             'id' => 'primary',
             'colorId' => '11',
             'maxResults' => '10',

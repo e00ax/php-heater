@@ -4,14 +4,15 @@
  * Name        : GoogleClient.class.php
  * Author      : Christian Rickert
  * Version     : 0.1
- * Description : Google client class
+ * Description : Bring up the Google Client
  * ============================================================================
 */
 namespace Heater;
 
 use Google_Client;
 
-class GoogleClient {
+class GoogleClient
+{
     protected $token;
     protected $credentials;
     protected $client;
@@ -20,10 +21,13 @@ class GoogleClient {
     /**
      * Constructor
      *
-     * @return ...
+     * @return void
      */
-    public function __construct($token, $credentials, $log)
-    {
+    public function __construct(
+        $token,
+        $credentials,
+        $log
+    ) {
         $this->token = $token;
         $this->credentials = $credentials;
 
@@ -54,21 +58,21 @@ class GoogleClient {
     /**
      * Get token
      *
-     * @return string
+     * @return array
      */
     public function getToken()
     {
-        return $this->token;
+        return json_decode(file_get_contents($this->token), true);
     }
 
 
     /**
      * Get credentials
      *
-     * @return string
+     * @return array
      */
     public function getCredentials()
     {
-        return $this->credentials;
+        return json_decode(file_get_contents($this->credentials), true);
     }
 }

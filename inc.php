@@ -1,23 +1,24 @@
 <?php
 /**
  * ============================================================================
- * Name        : loader.php
+ * Name        : inc.php
  * Author      : Christian Rickert
  * Version     : 0.1
- * Description : Make app wide class objects available
+ * Description : Includes & Objects
  * ============================================================================
 */
-$cfg = include('/config/sh.php');
-
 // Load vendors
 require __DIR__ . '/vendor/autoload.php';
+
+// Get config
+$cfg = include(__DIR__ . '/config/config.php');
 
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 use Heater\Heater;
 use Heater\DHT22;
 
-// Get Monolog stream (even if we do not need it)
+// Get Monolog stream
 $log = new Logger('sdHeater');
 $log->pushHandler(new StreamHandler($cfg['heater']['log']));
 

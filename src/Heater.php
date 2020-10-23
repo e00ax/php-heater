@@ -4,7 +4,8 @@
  * Name        : heater.class.php
  * Author      : Christian Rickert
  * Version     : 0.1
- * Description : Heater class
+ * Description : Control a relais card 
+ *             : (and an atmotec gas heater wich is connected to it)
  * ============================================================================
 */
 namespace Heater;
@@ -14,7 +15,8 @@ use Volantus\Pigpio\Protocol\Commands;
 use Volantus\Pigpio\Protocol\DefaultRequest;
 use Volantus\Pigpio\Protocol\DefaultResponseStructure;
 
-class Heater {
+class Heater
+{
     protected $pin;
     protected $log;
     protected $gpio;
@@ -22,7 +24,7 @@ class Heater {
     /**
      * Constructor
      *
-     * @return ...
+     * @return void
      */
     public function __construct($pin, $log, $gpio = '')
     {
@@ -35,7 +37,7 @@ class Heater {
     /**
      * Get gpio state
      *
-     * @return gpio output
+     * @return string
      */
     public function getStateExec()
     {
@@ -78,7 +80,7 @@ class Heater {
      * Set gpio state using gpio system call
      *
      * @param $state
-     * @return gpio output as text
+     * @return string
      */
     public function setStateExec($state)
     {

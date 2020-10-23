@@ -4,7 +4,7 @@
  * Name        : GoogleCalendar.class.php
  * Author      : Christian Rickert
  * Version     : 0.1
- * Description : Google Calendar class
+ * Description : Get Events and summary from Google Calendar
  * ============================================================================
 */
 namespace Heater;
@@ -26,10 +26,13 @@ class GoogleCalendar extends GoogleClient
         $credentials,
         $id,
         $log
-    )
-    {
+    ) {
         // Call GoogleClient
-        parent::__construct($token, $credentials, $log);
+        parent::__construct(
+            $token,
+            $credentials,
+            $log
+        );
 
         // Set calendar options
         $this->client->setApplicationName('Smarthome heater google calendar control');
@@ -118,7 +121,7 @@ class GoogleCalendar extends GoogleClient
                 if ($temp[0] >= 10 && $temp[0] <= 30) {
                     return $temp[0];
                 } else {
-                    $msg = sprintf("Temperature must be between 10°C and 40°C. Temperature in event: %s°C\n", $temp[0]);
+                    $msg = sprintf("Temperature must be between 10°C and 30°C. Temperature in event: %s°C\n", $temp[0]);
 
                     // Log to file using Monolog
                     $this->log->error($msg);

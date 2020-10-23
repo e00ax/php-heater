@@ -8,33 +8,20 @@
  * Options	   : [manual|auto|google]
  * ============================================================================
  */
-// App loader
-require_once('loader.php');
+require_once('inc.php');
 
 use Heater\GoogleCalendar;
+use Heater\Helper;
 
 try {
     // Only cli is allowed
-    if (php_sapi_name() != 'cli') {
-        $msg = "This application must be run on the command line.\n";
-
-        // Log to file using Monolog
-        $log->error($msg);
-
-        // Throw an exception in case we are testing on cli
-        throw new Exception($msg);
-    }
+    Helper::checkCli($log);
 
     // Set process title
-    if (!cli_set_process_title($cfg['heater']['text'])) {
-        $msg = "Unable to set process title!\n";
-
-        // Log to file using Monolog
-        $log->error($msg);
-
-        // Throw an exception in case we are testing on cli
-        throw new Exception($msg);
-    }
+    Helper::setProcTitle(
+        $log,
+        $cfg['heater']['title']
+    );
 
     // Loop forever with a sleeptime
     while (true) {
@@ -48,43 +35,28 @@ try {
         $dht22Last = $dht22->getLastDHT22();
 
         // Check if last dht22 entry is too old ( older than 10min)
-        $validTimestamp = new DateTime($timestamp);
-        $validTimestamp->modify('-10 minute');
-
-        if (isset($dht22Last[0]['timestamp']) && ($dht22Last[0]['timestamp'] < $validTimestamp->format("Y-m-d H:i:s"))) {
-            $msg = sprintf("Timestamp from last MySQL entry is older than 10 min: %s", $dht22Last[0]['timestamp']);
-
-            // Log to file using Monolog
-            $log->error($msg);
-
-            // Throw an exception in case we are testing on cli
-            throw new Exception($msg);
-        }
+        Helper::validateTimestamp(
+            $log,
+            $timestamp,
+            $dht22Last[0]['timestamp']
+        );
 
         // [Debug]
         echo "Temperatur: " . $dht22Last[0]['temp'] . "\n";
         echo "Heater state: " . $heaterState . "\n";
 
         // Check for ini file
-        if (!file_exists($cfg['heater']['ini'])) {
-            $msg = sprintf("Unable to read heater.ini in path: %s\n", $cfg['heater']['ini']);
-
-            // Log to file using Monolog
-            $log->error($msg);
-
-            // Throw an exception in case we are testing on cli
-            throw new Exception($msg);
-        }
-        
-        // Parse ini file
-        $ini = parse_ini_file($cfg['heater']['ini'], true);
+        $ini = Helper::checkIni(
+            $log,
+            $cfg['heater']['ini']
+        );
 
         switch ($ini['control']['mode']) {
 
             /**
              * Automatic heater cycles
              *
-             * Heater.ini
+             * from heater.ini
              */
             case 'auto':
                 // Check if heater array at least exists
@@ -117,31 +89,13 @@ try {
                             // Check for current time
                             if (($currTime >= $startTime) && ($currTime <= $endTime)) {
 
-                                // Start heater or keep running when temp is too low
-                                if ($dht22Last[0]['temp'] <= $temp) {
-
-                                    // Start heater only when state is off(1)
-                                    if ($heaterState == 1) {
-                                        $setHeaterState = $heater->setStatePigpio(0);
-
-                                        $log->info($msg = sprintf("Starting heater at room temp of %s and set temp of %s\n", $dht22Last[0]['temp'], $temp));
-
-                                        //[debug]
-                                        echo "Starting heater...\n";
-                                        //print_r($setHeaterState);
-                                    }
-                                } else {
-                                    // Stop heater only if necessary
-                                    if ($heaterState == 0) {
-                                        $setHeaterState = $heater->setStatePigpio(1);
-
-                                        $log->info($msg = sprintf("Stopping heater at room temp of %s and set temp of %s\n", $dht22Last[0]['temp'], $temp));
-
-                                        //[debug]
-                                        echo "Stopping heater...\n";
-                                        //print_r($setHeaterState);
-                                    }
-                                }
+                                // Set heater
+                                Helper::setHeater(
+                                    $heaterState,
+                                    $dht22Last[0]['temp'],
+                                    $temp,
+                                    $log
+                                );
                             }
                         }
                     }
@@ -172,31 +126,13 @@ try {
                 // [debug]
                 //echo Temp: " . $temp . "\n";
 
-                // Start heater or keep running when temp is too low
-                if ($dht22Last[0]['temp'] <= $temp) {
-
-                    // Start heater only when state is off(1)
-                    if ($heaterState == 1) {
-                        $setHeaterState = $heater->setStatePigpio(0);
-
-                        $log->info($msg = sprintf("Starting heater at room temp of %s and set temp of %s\n", $dht22Last[0]['temp'], $temp));
-
-                        //[debug]
-                        echo "Starting heater...\n";
-                        //print_r($setHeaterState);
-                    }
-                } else {
-                    // Stop heater only if necessary
-                    if ($heaterState == 0) {
-                        $setHeaterState = $heater->setStatePigpio(1);
-
-                        $log->info($msg = sprintf("Stopping heater at room temp of %s and set temp of %s\n", $dht22Last[0]['temp'], $temp));
-
-                        //[debug]
-                        echo "Stopping heater...\n";
-                        //print_r($setHeaterState);
-                    }
-                }
+                // Set heater
+                Helper::setHeater(
+                    $heaterState,
+                    $dht22Last[0]['temp'],
+                    $temp,
+                    $log
+                );
                 break;
  
             /**
@@ -238,31 +174,13 @@ try {
                     // [Debug]
                     //print_r($temp);
     
-                    // Start heater or keep running when temp is too low
-                    if ($dht22Last[0]['temp'] <= $temp) {
-
-                        // Start heater only when state is off(1)
-                        if ($heaterState == 1) {
-                            $setHeaterState = $heater->setStatePigpio(0);
-
-                            $log->info($msg = sprintf("Starting heater at room temp of %s and set temp of %s\n", $dht22Last[0]['temp'], $temp));
-
-                            //[debug]
-                            echo "Starting heater...\n";
-                            //print_r($setHeaterState);
-                        }
-                    } else {
-                        // Stop heater only when state is on(0)
-                        if ($heaterState == 0) {
-                            $setHeaterState = $heater->setStatePigpio(1);
-
-                            $log->info($msg = sprintf("Stopping heater at room temp of %s and set temp of %s\n", $dht22Last[0]['temp'], $temp));
-
-                            //[debug]
-                            echo "Stopping heater...\n";
-                            //print_r($setHeaterState);
-                        }
-                    }
+                    // Set heater
+                    Helper::setHeater(
+                        $heaterState,
+                        $dht22Last[0]['temp'],
+                        $temp,
+                        $log
+                    );
                 }
 
                 fclose($fp);

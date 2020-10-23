@@ -4,12 +4,13 @@
  * Name        : dht22.class.php
  * Author      : Christian Rickert
  * Version     : 0.1
- * Description : DHT22 class
+ * Description : Get DHT22 database events
  * ============================================================================
 */
 namespace Heater;
 
-class DHT22 {
+class DHT22
+{
     protected $host;
     protected $user;
     protected $passwd;
@@ -19,9 +20,11 @@ class DHT22 {
 
 
     /**
-     * query_fetch_assoc
+     * queryFetchAssoc
      *
      * @access private
+     * @param string
+     * @return array
      */
     private function queryFetchAssoc($query)
     {
@@ -49,7 +52,8 @@ class DHT22 {
     /**
      * Constructor
      *
-     * @return ...
+     * @param string
+     * @return void
      */
     public function __construct(
         $host,
@@ -88,6 +92,8 @@ class DHT22 {
 
     /**
      * Get dht22 as assoc array
+     *
+     * @return array
      */
     public function getDHT22()
     {
@@ -97,6 +103,8 @@ class DHT22 {
 
     /**
      * Get last entry dht22 as assoc array
+     *
+     * @return array
      */
     public function getLastDHT22()
     {
