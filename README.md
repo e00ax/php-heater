@@ -21,10 +21,17 @@ File names must be token.json and crendtials.json.
 Rename `<dht22/dht22_example.ini>` to `<dht22/dht22.ini>`.<br>
 Fill in your pin and mysql data.<br>
 
+## Startup:
+Go to `<dht22>`.<br>
+Start the service with `./DHTXXD_SYS_V start`.<br>
+
 ## Heater Configuration:
 Rename `<config/config_sample.php>` to `<config/config.php>`.<br>
 Fill in your pin, paths and mysql data.<br>
 Rename `<config/heater_sample.ini>` to `<config/heater.ini>`.<br>
+
+## Startup:
+Start the service with `./HEATER_SYS_V start`.<br>
 
 ## To Do:
 - Implement proper hysteresis (not necessary in case)
