@@ -36,8 +36,8 @@ Start the service with `./HEATER_SYS_V start`.<br>
 
 ## To Do:
 - Implement proper hysteresis (not necessary in my case).
-- Change from dht22 to pt1000 for more stability and accuracy.
-Implement script to create the necessery SQL table.
+- Change from dht22 to pt1000 for more stability and accuracy.<br>
+- Implement script to create the necessery SQL table.
 
 
 > Sorry, no further documentation available yet!
