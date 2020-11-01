@@ -16,7 +16,7 @@ Package may be installed using Composer:
 
 Create directory `<auth>` in the root directory.<br>
 Place your google token and credentials in `<auth>`.<br>
-File names must be token.json and crendtials.json.
+File names must be `token.json` and `crendtials.json`.
 
 ## Dht22 Configuration:
 Rename `<dht22/dht22_example.ini>` to `<dht22/dht22.ini>`.<br>
