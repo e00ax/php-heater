@@ -1,17 +1,31 @@
 <?php
-/**
- * ============================================================================
- * Name        : heater.php
- * Author      : Christian Rickert
- * Version     : 0.1
- * Description : Deamon script to handle automatic heating control
- * Options	   : [manual|auto|google]
- * ============================================================================
- */
-require_once('inc.php');
 
-use Heater\GoogleCalendar;
-use Heater\Helper;
+require __DIR__ . '/vendor/autoload.php';
+
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+use E00ax\Heater\Heater;
+use E00ax\Heater\DHT22;
+use E00ax\Heater\GoogleCalendar;
+use E00ax\Heater\Helper;
+
+$cfg = include(__DIR__ . '/config/config.php');
+
+$log = new Logger('sdHeater');
+$log->pushHandler(new StreamHandler($cfg['heater']['log']));
+
+$heater = new Heater(
+    $cfg['heater']['channel']['1'],
+    $log
+);
+
+$dht22 = new DHT22(
+    $cfg['mysql']['server'],
+    $cfg['mysql']['username'],
+    $cfg['mysql']['passwd'],
+    $cfg['mysql']['db'],
+    $log
+);
 
 try {
     // Only cli is allowed
@@ -34,7 +48,7 @@ try {
         $heaterState = $heater->getStatePigpio($cfg['heater']['channel'][1]);
         $dht22Last = $dht22->getLastDHT22();
 
-        // Check if last dht22 entry is too old ( older than 10min)
+        // Validate last dht22 enty
         Helper::validateTimestamp(
             $log,
             $timestamp,
@@ -52,7 +66,6 @@ try {
         );
 
         switch ($ini['control']['mode']) {
-
             /**
              * Automatic heater cycles
              *
@@ -94,7 +107,8 @@ try {
                                     $heaterState,
                                     $dht22Last[0]['temp'],
                                     $temp,
-                                    $log
+                                    $log,
+                                    $cfg['heater']['channel']['1']
                                 );
                             }
                         }
@@ -131,7 +145,8 @@ try {
                     $heaterState,
                     $dht22Last[0]['temp'],
                     $temp,
-                    $log
+                    $log,
+                    $cfg['heater']['channel']['1']
                 );
                 break;
  
@@ -179,7 +194,8 @@ try {
                         $heaterState,
                         $dht22Last[0]['temp'],
                         $temp,
-                        $log
+                        $log,
+                        $cfg['heater']['channel']['1']
                     );
                 }
 

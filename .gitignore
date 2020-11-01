@@ -1,5 +1,2 @@
-/auth/credentials.json
-/auth/token.json
-/config/config.php
-/config/heater.ini
-composer.phar
+/auth
+/vendor

@@ -1,13 +1,6 @@
 <?php
-/**
- * ============================================================================
- * Name        : GoogleClient.class.php
- * Author      : Christian Rickert
- * Version     : 0.1
- * Description : Bring up the Google Client
- * ============================================================================
-*/
-namespace Heater;
+
+namespace E00ax\Heater;
 
 use Google_Client;
 
@@ -58,7 +51,7 @@ class GoogleClient
     /**
      * Get token
      *
-     * @return array
+     * @return string google developer token
      */
     public function getToken()
     {
@@ -69,7 +62,7 @@ class GoogleClient
     /**
      * Get credentials
      *
-     * @return array
+     * @return array google developer credentials
      */
     public function getCredentials()
     {

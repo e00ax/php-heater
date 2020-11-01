@@ -35,10 +35,6 @@ class ComposerStaticInit0dcc2550cda3d46f6cbc5d449745a4e3
         array (
             'Monolog\\' => 8,
         ),
-        'H' => 
-        array (
-            'Heater\\' => 7,
-        ),
         'G' => 
         array (
             'GuzzleHttp\\Psr7\\' => 16,
@@ -49,6 +45,10 @@ class ComposerStaticInit0dcc2550cda3d46f6cbc5d449745a4e3
         'F' => 
         array (
             'Firebase\\JWT\\' => 13,
+        ),
+        'E' => 
+        array (
+            'E00ax\\Heater\\' => 13,
         ),
     );
 
@@ -85,10 +85,6 @@ class ComposerStaticInit0dcc2550cda3d46f6cbc5d449745a4e3
         array (
             0 => __DIR__ . '/..' . '/monolog/monolog/src/Monolog',
         ),
-        'Heater\\' => 
-        array (
-            0 => __DIR__ . '/../..' . '/src',
-        ),
         'GuzzleHttp\\Psr7\\' => 
         array (
             0 => __DIR__ . '/..' . '/guzzlehttp/psr7/src',
@@ -108,6 +104,10 @@ class ComposerStaticInit0dcc2550cda3d46f6cbc5d449745a4e3
         'Firebase\\JWT\\' => 
         array (
             0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
+        ),
+        'E00ax\\Heater\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/src',
         ),
     );
 

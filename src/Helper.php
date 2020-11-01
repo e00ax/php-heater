@@ -1,19 +1,15 @@
 <?php
-/**
- * ============================================================================
- * Name        : functions.php
- * Author      : Christian Rickert
- * Version     : 0.1
- * Description : Helper functions
- * ============================================================================
- */
-namespace Heater;
+
+namespace E00ax\Heater;
+
+use E00ax\Heater\Heater;
 
 class Helper
 {
     /**
      * Check for cli
      *
+     * @param object $log monolog
      * @return void
      */
     public static function checkCli($log)
@@ -34,6 +30,8 @@ class Helper
     /**
      * Set proc title for better view in process manager
      *
+     * @param object $log monolog
+     * @param string $title proc name
      * @return void
      */
     public static function setProcTitle($log, $title)
@@ -54,6 +52,9 @@ class Helper
     /**
      * Check for valid timestamp
      *
+     * @param object $log monolog
+     * @param string $timestamp
+     * @param array $dht22Last last dht22 entry
      * @return void
      */
     public static function validateTimestamp(
@@ -80,12 +81,12 @@ class Helper
     /**
      * Check for ini file
      *
-     * @return ini
+     * @param object $log monolog
+     * @param string $iniFile
+     * @return array parsed ini file
      */
-    public static function checkIni(
-        $log,
-        $iniFile
-    ) {
+    public static function checkIni($log, $iniFile)
+    {
         // Check for ini file
         if (!file_exists($iniFile)) {
             $msg = sprintf("Unable to read heater.ini in path: %s\n", $iniFile);
@@ -102,40 +103,54 @@ class Helper
 
 
     /**
-     * Set Heater
+     * Set Heater state
      *
+     * @param int $heaterState
+     * @param array $dht22Last last dht22 entry
+     * @param string $temp
+     * @param object $log monolog
+     * @param int $channel pin channel
      * @return void
      */
     public static function setHeater(
         $heaterState,
         $dht22Last,
         $temp,
-        $log
+        $log,
+        $channel
     ) {
+        $heater = new Heater(
+            $channel,
+            $log
+        );
+
         // Start heater or keep running when temp is too low
         if ($dht22Last <= $temp) {
 
             // Start heater only when state is off(1)
             if ($heaterState == 1) {
-                //$setHeaterState = $heater->setStatePigpio(0);
+                $heater->setStatePigpio(0);
 
                 $log->info(sprintf("Starting heater at room temp of %s and set temp of %s\n", $dht22Last, $temp));
 
                 //[debug]
-                echo "Starting heater...\n";
+                //echo "Starting heater...\n";
                 //print_r($setHeaterState);
             }
         } else {
             // Stop heater only if necessary
             if ($heaterState == 0) {
-                //$setHeaterState = $heater->setStatePigpio(1);
+                $heater->setStatePigpio(1);
 
                 $log->info(sprintf("Stopping heater at room temp of %s and set temp of %s\n", $dht22Last, $temp));
 
                 //[debug]
-                echo "Stopping heater...\n";
+                //echo "Stopping heater...\n";
                 //print_r($setHeaterState);
             }
         }
+
+        // Free memory
+        $heater = null;
     }
 }

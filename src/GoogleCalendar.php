@@ -1,13 +1,6 @@
 <?php
-/**
- * ============================================================================
- * Name        : GoogleCalendar.class.php
- * Author      : Christian Rickert
- * Version     : 0.1
- * Description : Get Events and summary from Google Calendar
- * ============================================================================
-*/
-namespace Heater;
+
+namespace E00ax\Heater;
 
 use Google_Service_Calendar;
 
@@ -50,7 +43,8 @@ class GoogleCalendar extends GoogleClient
     /**
      * Get calendar output
      *
-     * @return string
+     * @param int $maxResults
+     * @return array events
      */
     public function getEvents($maxResults)
     {
@@ -79,7 +73,9 @@ class GoogleCalendar extends GoogleClient
     /**
      * Get current temperature from events
      *
-     * @return string
+     * @param arrray $events
+     * @param int $colorId color id of the calendar entry (tomato = 11 = default)
+     * @return void
      */
     public function getCurrentTemp($events, $colorId)
     {
