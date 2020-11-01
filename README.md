@@ -35,7 +35,7 @@ Rename `<config/heater_sample.ini>` to `<config/heater.ini>`.<br>
 Start the service with `./HEATER_SYS_V start`.<br>
 
 ## To Do:
-- Implement proper hysteresis (not necessary in case).
+- Implement proper hysteresis (not necessary in my case).
 - Change from dht22 to pt1000 for more stability and accuracy.
 
 
