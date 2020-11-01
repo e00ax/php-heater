@@ -5,6 +5,7 @@
 - A google developer token and credentials.
 - The setup assumes you have a raspberry pi with a relais card or something similar running.
 - Lamp server enviroment must be running.
+- Pigpiod must be running.
 - Finally the pi must be connected to the Atmotec boiler so it can power on the heater by pin state.<br>
 
 > The Atmotec gas boiler runs on 230V so be sure you know what you are doing!<br>
